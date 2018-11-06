@@ -7,6 +7,7 @@ import flask_debugtoolbar
 import flask_security.decorators
 
 import models
+import utils
 
 app = flask.Flask(__name__)
 app.config['FLASK_ENV'] = os.environ.get('FLASK_ENV', 'development')
@@ -53,6 +54,11 @@ def home():
 def member():
     user = flask_security.core.current_user
     return str(user.id)
+
+
+@app.route('/movies')
+def movies():
+    return flask.jsonify(utils.fetch_movies())
 
 
 if __name__ == "__main__":

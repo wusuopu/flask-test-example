@@ -53,3 +53,19 @@ def test_member_page_with_login(auth_client):
     rv = auth_client.get('/member')
     assert rv.status_code == 200
     assert rv.data.decode('utf8') == str(fixture.users[0].id)
+
+
+def test_mock_api(client):
+    """
+    mock 外部的函数，使其返回固定的结果
+    """
+    fetch_movies_patch = mock.patch('utils.fetch_movies')
+
+    func = fetch_movies_patch.start()
+    func.return_value = {'start': 0, 'count': 0, 'subjects': []}
+
+    rv = client.get('/movies')
+    assert rv.status_code == 200
+    assert func.called
+
+    fetch_movies_patch.stop()
