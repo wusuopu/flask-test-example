@@ -4,7 +4,7 @@
 import os
 import flask
 import flask_debugtoolbar
-from flask_security import Security
+import flask_security.decorators
 
 import models
 
@@ -40,7 +40,19 @@ app.config['DEBUG_TB_PANELS'] = [
 
 toolbar = flask_debugtoolbar.DebugToolbarExtension(app)
 models.config(app)
-Security(app, models.UserDatastore)
+flask_security.Security(app, models.UserDatastore)
+
+
+@app.route('/')
+def home():
+    return 'ok'
+
+
+@app.route('/member')
+@flask_security.decorators.login_required
+def member():
+    user = flask_security.core.current_user
+    return str(user.id)
 
 
 if __name__ == "__main__":

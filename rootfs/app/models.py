@@ -61,7 +61,7 @@ class User(BaseDocument, UserMixin):
     roles = ListField(ReferenceField('Role'), default=[])
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     def to_json(self):
         data = {}
