@@ -58,7 +58,10 @@ def member():
 
 @app.route('/movies')
 def movies():
-    return flask.jsonify(utils.fetch_movies())
+    data = utils.fetch_movies()
+    if not data:
+        return '', 500
+    return flask.jsonify(data)
 
 
 if __name__ == "__main__":

@@ -55,9 +55,9 @@ def test_member_page_with_login(auth_client):
     assert rv.data.decode('utf8') == str(fixture.users[0].id)
 
 
-def test_mock_api(client):
+def test_movies_api(client):
     """
-    mock 外部的函数，使其返回固定的结果
+    调用豆瓣api成功的情况
     """
     fetch_movies_patch = mock.patch('utils.fetch_movies')
 
@@ -66,6 +66,22 @@ def test_mock_api(client):
 
     rv = client.get('/movies')
     assert rv.status_code == 200
+    assert func.called
+
+    fetch_movies_patch.stop()
+
+
+def test_movies_api_with_error(client):
+    """
+    调用豆瓣api出错的情况
+    """
+    fetch_movies_patch = mock.patch('utils.fetch_movies')
+
+    func = fetch_movies_patch.start()
+    func.return_value = None
+
+    rv = client.get('/movies')
+    assert rv.status_code == 500
     assert func.called
 
     fetch_movies_patch.stop()
