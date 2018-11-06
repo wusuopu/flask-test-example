@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  sut:
+    build: .
+    environment:
+      - CI=true
+      - FLASK_ENV=test
+    command: py.test -s tests
